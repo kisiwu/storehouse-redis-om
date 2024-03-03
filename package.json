@@ -1,6 +1,6 @@
 {
   "name": "@storehouse/redis-om",
-  "version": "2.3.0",
+  "version": "0.4.3",
   "description": "Redis OM manager for @storehouse/core",
   "main": "lib/index.js",
   "scripts": {
