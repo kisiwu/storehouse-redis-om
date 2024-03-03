@@ -66,7 +66,15 @@ export class RedisOMManager implements IManager {
 
   private _registerConnectionEvents() {
     this.#connection.on('error', (err) => {
-      Log.info(`[${this.name}] Redis Client Error`, err);
+      Log.error(`[${this.name}] Redis Client Error`, err);
+    }).on('connect', () => {
+      Log.info('[%s] connecting ...', this.name);
+    }).on('ready', () => {
+      Log.info('[%s] connected!', this.name);
+    }).on('end', () => {
+      Log.info('[%s] disconnected!', this.name);
+    }).on('reconnecting', () => {
+      Log.info('[%s] reconnecting ...', this.name);
     });
   }
 
@@ -97,5 +105,27 @@ export class RedisOMManager implements IManager {
 
   getModel(name: string): Repository | undefined {
     return this.#repositories.get(name);
+  }
+
+  /**
+   * Creates indexes in Redis for use by the Repository#search method. 
+   * Does not create a new index for an index that hasn't changed. 
+   * Requires that RediSearch and RedisJSON are installed on your instance of Redis.
+   */
+  async createIndexes(): Promise<void> {
+    for(const entry of this.#repositories.entries()) {
+      await entry[1].createIndex()
+    }
+  }
+
+  /**
+   * Removes existing indexes from Redis. 
+   * Use this method if you want to swap out your indexes because your Entities have changed. 
+   * Requires that RediSearch and RedisJSON are installed on your instance of Redis.
+   */
+  async dropIndexes(): Promise<void> {
+    for(const entry of this.#repositories.entries()) {
+      await entry[1].dropIndex()
+    }
   }
 }

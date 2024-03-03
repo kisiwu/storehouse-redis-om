@@ -1,6 +1,6 @@
 import { Debug } from '@novice1/logger';
 import Storehouse from '@storehouse/core';
-import { Schema } from 'redis-om'
+import { EntityId, Schema } from 'redis-om'
 import { RedisOMManager, getModel, getManager, getConnection } from '../../src/index';
 
 Debug.enable('@storehouse/redis-om*');
@@ -46,12 +46,16 @@ describe('connect', function () {
       const conn = getConnection(Storehouse, 'redisom')
       await conn.connect();
       logger.info('retrieved connection');
-      logger.info(conn.eventNames());
+      logger.info('events=', conn.eventNames());
 
       const manager = getManager(Storehouse);
+      await manager.dropIndexes() // force dropping indexes
+      await manager.createIndexes()
+      logger.info('created indexes for all repositories (to use RedisSearch)');
+
       const AlbumsModel = manager.getModel('album');
       if (AlbumsModel) {
-        logger.log('album test:', await AlbumsModel.fetch('test'));
+        logger.log('nb albums:', await AlbumsModel.search().return.count());
       }
 
       const Albums = getModel(Storehouse, 'album');
@@ -65,16 +69,19 @@ describe('connect', function () {
         outOfPublication: true
       }
       const r = await Albums?.save('test', album)
-      logger.info('added new album from', r?.artist);
+      if (r?.[EntityId])
+        Albums?.expire(r[EntityId], 120 * 1000)
+      logger.info('added new album from', r?.artist, `ID=${r?.[EntityId]}`);
+      logger.log('current nb albums:', await Albums?.search().return.count());
 
       const fetchedAlbum = await Albums?.fetch('test');
       if (fetchedAlbum) {
-        logger.log('new album title:', fetchedAlbum.title);
+        logger.log('found album title:', fetchedAlbum.title);
       }
 
       logger.info('deleted album', await Albums?.remove('test'));
 
-      logger.log('current album "test":', await Albums?.fetch('test'));
+      logger.log('current nb albums:', await Albums?.search().return.count());
 
       await Storehouse.close();
     } catch (e) {
