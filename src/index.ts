@@ -14,7 +14,7 @@ export interface RedisOMManagerArg extends ManagerArg {
   }
 }
 
-export function getModel(registry: Registry, managerName: string, modelName?: string): Repository | undefined {
+export function getModel(registry: Registry, managerName: string, modelName?: string): Repository {
   const model = registry.getModel<Repository | undefined>(managerName, modelName);
   if (!model) {
     throw new ReferenceError(`Could not find model "${modelName || managerName}"`);

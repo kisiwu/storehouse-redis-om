@@ -31,7 +31,7 @@ describe('connect', function () {
           type: RedisOMManager,
           config: {
             models: [albumSchema, studioSchema],
-            // MongoClientOptions
+            // RedisClientOptions
             options: {
               password: params('redis.password'),
               socket: {

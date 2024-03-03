@@ -33,7 +33,7 @@ describe('connect', function () {
           type: '@storehouse/redis-om',
           config: {
             models: [albumSchema, studioSchema],
-            // MongoClientOptions
+            // RedisClientOptions
             options: {
               password: params('redis.password'),
               socket: {
