@@ -56,7 +56,7 @@ export class RedisOMManager implements IManager {
 
     settings.config?.models
       .forEach((schema) => {
-        this._addModel(schema)
+        this.addModel(schema)
       });
 
     this._registerConnectionEvents();
@@ -78,7 +78,7 @@ export class RedisOMManager implements IManager {
     });
   }
 
-  private _addModel(m: Schema) {
+  protected addModel(m: Schema) {
     this.#repositories.set(m.schemaName, new Repository(m, this.#connection));
 
     Log('[%s] added model \'%s\'', this.name, m.schemaName);
