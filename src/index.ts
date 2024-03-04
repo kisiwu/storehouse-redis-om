@@ -9,7 +9,7 @@ const Log = Logger.debugger('@storehouse/redis-om:manager');
 
 export interface RedisOMManagerArg extends ManagerArg {
   config?: {
-    models: Schema[],
+    models?: Schema[],
     options?: RedisClientOptions
   }
 }
@@ -55,7 +55,7 @@ export class RedisOMManager implements IManager {
     this.#repositories = new Map()
 
     settings.config?.models
-      .forEach((schema) => {
+      ?.forEach((schema) => {
         this.addModel(schema)
       });
 
