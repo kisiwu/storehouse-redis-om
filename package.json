@@ -1,6 +1,6 @@
 {
   "name": "@storehouse/redis-om",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "Redis OM manager for @storehouse/core",
   "main": "lib/index.js",
   "scripts": {
@@ -31,13 +31,13 @@
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/parser": "^7.0.2",
     "eslint": "^8.57.0",
-    "kaukau": "^3.0.1",
+    "kaukau": "^3.1.0",
     "ts-node": "^10.9.2",
     "typedoc": "^0.25.8",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@novice1/logger": "^1.3.3",
+    "@novice1/logger": "^1.4.0",
     "@storehouse/core": "^1.1.1",
     "redis": "^4.6.13",
     "redis-om": "^0.4.3",
