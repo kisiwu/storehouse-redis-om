@@ -7,7 +7,7 @@
     "doc": "typedoc",
     "build": "tsc",
     "lint": "eslint src/**/*.ts",
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\", \"noUnusedParameters\": false}' kaukau --require ts-node/register --config kaukau-src.js",
+    "test": "kaukau --require ts-node/register --config kaukau-src.js",
     "testlib": "kaukau --config kaukau-lib.js"
   },
   "repository": {
