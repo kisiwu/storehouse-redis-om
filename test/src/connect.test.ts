@@ -1,12 +1,15 @@
 import { Debug } from '@novice1/logger';
 import Storehouse from '@storehouse/core';
-import { EntityId, Schema } from 'redis-om'
+import { EntityId as RedisOMEntityId, Schema } from 'redis-om'
 import { RedisOMManager, getModel, getManager, getConnection } from '../../src/index';
 
 Debug.enable('@storehouse/redis-om*');
 
 describe('connect', function () {
   const { logger, params } = this.ctx.kaukau;
+
+  // to be able to use it as an index
+  const EntityId = RedisOMEntityId as unknown as string
 
   it('should init and connect', async () => {
     try {
