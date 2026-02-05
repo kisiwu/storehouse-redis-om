@@ -1,5 +1,5 @@
 const { Debug } = require('@novice1/logger');
-const Storehouse = require('@storehouse/core');
+const { Storehouse } = require('@storehouse/core');
 const { EntityId, Schema } = require('redis-om');
 const { RedisOMManager, getModel, getManager, getConnection } = require('../../lib/index');
 
