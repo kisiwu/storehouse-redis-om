@@ -1,14 +1,17 @@
 {
   "name": "@storehouse/redis-om",
-  "version": "0.4.7",
+  "version": "1.0.0",
   "description": "Redis OM manager for @storehouse/core",
   "main": "lib/index.js",
   "scripts": {
     "doc": "typedoc",
     "build": "tsc",
-    "lint": "eslint src/**/*.ts",
-    "test": "kaukau --require ts-node/register --config kaukau-src.js",
-    "testlib": "kaukau --config kaukau-lib.js"
+    "lint": "eslint .",
+    "test": "kaukau --require ts-node/register --config kaukau-src.config.mjs",
+    "test:lib": "kaukau --config kaukau-lib.config.mjs",
+    "format": "cross-env NODE_OPTIONS=--experimental-strip-types prettier --write ./src",
+    "format:check": "cross-env NODE_OPTIONS=--experimental-strip-types prettier --check ./src",
+    "format:staged": "cross-env NODE_OPTIONS=--experimental-strip-types lint-staged"
   },
   "repository": {
     "type": "git",
@@ -25,22 +28,37 @@
   },
   "homepage": "https://kisiwu.github.io/storehouse/redis-om/latest/",
   "devDependencies": {
-    "@types/chai": "^4.3.12",
-    "@types/mocha": "^10.0.9",
-    "@types/node": "^22.7.6",
-    "@typescript-eslint/eslint-plugin": "^8.10.0",
-    "@typescript-eslint/parser": "^8.10.0",
-    "eslint": "^8.57.0",
-    "kaukau": "^4.0.0",
+    "@eslint/eslintrc": "^3.3.3",
+    "@eslint/js": "^9.39.2",
+    "@stylistic/eslint-plugin": "^5.7.1",
+    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
+    "@types/chai": "^5.2.3",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^25.2.1",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
+    "chai": "^6.2.2",
+    "cross-env": "^10.1.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-mocha": "^11.2.0",
+    "globals": "^17.3.0",
+    "kaukau": "^4.2.1",
+    "lint-staged": "^16.2.7",
+    "mocha": "^11.7.5",
+    "prettier": "^3.8.1",
     "ts-node": "^10.9.2",
-    "typedoc": "^0.26.10",
-    "typescript": "^5.6.3"
+    "typedoc": "^0.28.16",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.54.0"
   },
   "dependencies": {
-    "@novice1/logger": "^1.5.0",
-    "@storehouse/core": "^1.1.1",
-    "redis": "^4.7.0",
-    "redis-om": "^0.4.6",
-    "tslib": "^2.8.0"
+    "@novice1/logger": "^1.6.1",
+    "@storehouse/core": "^2.1.0",
+    "redis": "^5.10.0",
+    "redis-om": "^0.4.7",
+    "tslib": "^2.8.1"
   }
 }

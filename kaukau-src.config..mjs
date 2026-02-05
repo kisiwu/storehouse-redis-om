@@ -1,4 +1,6 @@
-module.exports = {
+import { defineConfig } from 'kaukau/config'
+
+export default defineConfig({
   enableLogs: true,
   exitOnFail: true,
   files: 'test/src',
@@ -22,4 +24,4 @@ module.exports = {
       password: process.env.TEST_REDIS_PASSWORD
     }
   },
-};
+});

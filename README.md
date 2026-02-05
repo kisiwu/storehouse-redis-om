@@ -25,7 +25,7 @@ export const movieSchema = new Schema('movies', {
 
 index.ts
 ```ts
-import Storehouse from '@storehouse/core';
+import { Storehouse } from '@storehouse/core';
 import { RedisOMManager } from '@storehouse/redis-om';
 import { movieSchema } from './movies';
 
@@ -54,7 +54,7 @@ Storehouse.add({
 Once the manager registered, you can access it or directly get the connection or models.
 
 ```ts
-import Storehouse from '@storehouse/core';
+import { Storehouse } from '@storehouse/core';
 import { RedisOMManager } from '@storehouse/redis-om';
 import { RedisConnection, Repository } from 'redis-om';
 
@@ -90,7 +90,7 @@ There are methods to help you retrieve the connection, manager and models so you
 Those methods throw an error when they fail.
 
 ```ts
-import Storehouse from '@storehouse/core';
+import { Storehouse } from '@storehouse/core';
 import { getConnection, getManager, getModel } from '@storehouse/redis-om';
 
 // connection

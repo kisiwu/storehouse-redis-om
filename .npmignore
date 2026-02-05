@@ -8,7 +8,7 @@ test
 types
 todo
 typedoc.json
-kaukau-*.js
+kaukau-*.mjs
 
 # Logs
 logs
