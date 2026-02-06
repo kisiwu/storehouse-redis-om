@@ -1,6 +1,6 @@
 import { Debug } from '@novice1/logger';
 import { Storehouse } from '@storehouse/core';
-import { Entity, EntityId, Schema } from 'redis-om'
+import { EntityId, Schema } from 'redis-om'
 import { RedisOMManager, getModel, getManager, getConnection } from '../../src/index';
 import { RedisClientType } from 'redis';
 

@@ -447,14 +447,14 @@ export class RedisOMManager<
    * if (userRepo) {
    *   const users = await userRepo.search().return.all();
    * }
-   * 
+   *
    * // With typed entity
    * interface User {
    *   name: string;
    *   email: string;
    *   age: number;
    * }
-   * 
+   *
    * const userRepo = manager.getModel<User>('User');
    * if (userRepo) {
    *   const users = await userRepo.search().return.all();
