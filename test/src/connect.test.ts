@@ -1,15 +1,13 @@
 import { Debug } from '@novice1/logger';
 import { Storehouse } from '@storehouse/core';
-import { EntityId as RedisOMEntityId, Schema } from 'redis-om'
+import { Entity, EntityId, Schema } from 'redis-om'
 import { RedisOMManager, getModel, getManager, getConnection } from '../../src/index';
+import { RedisClientType } from 'redis';
 
 Debug.enable('@storehouse/redis-om*');
 
 describe('connect', function () {
   const { logger, params } = this.ctx.kaukau;
-
-  // to be able to use it as an index
-  const EntityId = RedisOMEntityId as unknown as string
 
   it('should init and connect', async () => {
     try {
@@ -46,7 +44,7 @@ describe('connect', function () {
         }
       });
 
-      const conn = getConnection(Storehouse, 'redisom')
+      const conn: RedisClientType = getConnection(Storehouse, 'redisom')
       await conn.connect();
       logger.info('retrieved connection');
       logger.info('events=', conn.eventNames());
@@ -61,7 +59,7 @@ describe('connect', function () {
         logger.log('nb albums:', await AlbumsModel.search().return.count());
       }
 
-      const Albums = getModel(Storehouse, 'album');
+      const Albums = getModel<{ artist: string; title: string; year: number; genres: string[]; songDurations: number[]; outOfPublication: boolean }>(Storehouse, 'album');
 
       const album = {
         artist: 'Mushroomhead',

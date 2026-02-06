@@ -20,7 +20,7 @@ import {
   TypeMapping,
   createClient,
 } from 'redis';
-import { Schema, Repository, RedisConnection } from 'redis-om';
+import { Schema, Repository, RedisConnection, Entity } from 'redis-om';
 
 const Log = Logger.debugger('@storehouse/redis-om:manager');
 
@@ -79,6 +79,8 @@ export interface RedisOMManagerArg<
  * 1. When called with 2 arguments, retrieves the model using the second argument as the model name from the default manager
  * 2. When called with 3 arguments, retrieves the model from a specific manager
  *
+ * @template T - The entity type that defines the structure of data stored in the repository. Defaults to `Record<string, any>`
+ *
  * @param registry - The Storehouse registry containing registered managers and models
  * @param modelName - When used with 2 arguments, this is the name of the model to retrieve
  * @returns The requested Redis-OM Repository
@@ -87,34 +89,64 @@ export interface RedisOMManagerArg<
  *
  * @example
  * ```typescript
- * // Get model from default manager
- * const userRepository = getModel(registry, 'User');
- * const entities = await userRepository.search().return.all();
+ * // Get model from default manager with typed entity
+ * interface User {
+ *   name: string;
+ *   email: string;
+ *   age: number;
+ * }
+ *
+ * const userRepository = getModel<User>(registry, 'User');
+ * const users = await userRepository.search().return.all();
+ * // users will be typed as Array<User & Entity>
  * ```
  */
-export function getModel(registry: Registry, modelName: string): Repository;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getModel<T extends Record<string, any> = Record<string, any>>(
+  registry: Registry,
+  modelName: string
+): Repository<T & Entity>;
 
 /**
  * Retrieves a Redis-OM Repository (model) from a specific manager in the registry.
  *
+ * @template T - The entity type that defines the structure of data stored in the repository. Defaults to `Record<string, any>`
+ *
  * @param registry - The Storehouse registry containing registered managers and models
  * @param managerName - The name of the manager containing the model
  * @param modelName - The name of the specific model to retrieve
- * @returns The requested Redis-OM Repository
+ * @returns The requested Redis-OM Repository typed with the entity structure
  *
  * @throws {ModelNotFoundError} If the model is not found in the registry
  *
  * @example
  * ```typescript
- * // Get model from specific manager
- * const userRepository = getModel(registry, 'redis-manager', 'User');
- * const entities = await userRepository.search().return.all();
+ * // Get model from specific manager with typed entity
+ * interface Product {
+ *   title: string;
+ *   price: number;
+ *   inStock: boolean;
+ * }
+ *
+ * const productRepository = getModel<Product>(registry, 'redis-manager', 'Product');
+ * const products = await productRepository.search().return.all();
+ * // products will be typed as Array<Product & Entity>
  * ```
  */
-export function getModel(registry: Registry, managerName: string, modelName: string): Repository;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getModel<T extends Record<string, any> = Record<string, any>>(
+  registry: Registry,
+  managerName: string,
+  modelName: string
+): Repository<T & Entity>;
 
-export function getModel(registry: Registry, managerName: string, modelName?: string): Repository {
-  const model = registry.getModel<Repository | undefined>(managerName, modelName);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getModel<T extends Record<string, any> = Record<string, any>>(
+  registry: Registry,
+  managerName: string,
+  modelName?: string
+): Repository<T & Entity> {
+  const model = registry.getModel<Repository<T & Entity> | undefined>(managerName, modelName);
   if (!model) {
     throw new ModelNotFoundError(modelName || managerName, modelName ? managerName : undefined);
   }
@@ -213,6 +245,8 @@ export interface RedisOMHealthCheckResult extends HealthCheckResult {
     models?: string[];
     /** Time taken to perform the health check in milliseconds */
     latency?: string;
+    /** Error message if the health check failed */
+    error?: string;
     /** Additional custom properties */
     [key: string]: unknown;
   };
@@ -401,19 +435,36 @@ export class RedisOMManager<
   /**
    * Retrieves a registered Redis-OM Repository by its schema name.
    *
+   * @template T - The entity type that defines the structure of data stored in the repository. Defaults to `Record<string, any>`
+   *
    * @param name - The schema name of the model to retrieve
-   * @returns The Repository instance, or undefined if not found
+   * @returns The Repository instance typed with the entity structure, or undefined if not found
    *
    * @example
    * ```typescript
+   * // Without type parameter
    * const userRepo = manager.getModel('User');
    * if (userRepo) {
    *   const users = await userRepo.search().return.all();
    * }
+   * 
+   * // With typed entity
+   * interface User {
+   *   name: string;
+   *   email: string;
+   *   age: number;
+   * }
+   * 
+   * const userRepo = manager.getModel<User>('User');
+   * if (userRepo) {
+   *   const users = await userRepo.search().return.all();
+   *   // users will be typed as Array<User & Entity>
+   * }
    * ```
    */
-  getModel(name: string): Repository | undefined {
-    return this.#repositories.get(name);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getModel<T extends Record<string, any> = Record<string, any>>(name: string): Repository<T & Entity> | undefined {
+    return this.#repositories.get(name) as Repository<T & Entity> | undefined;
   }
 
   /**
