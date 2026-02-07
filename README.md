@@ -7,7 +7,7 @@ Redis-OM manager adapter for [@storehouse/core](https://www.npmjs.com/package/@s
 - **Type-safe Redis operations** with Redis-OM object mapping
 - **Schema-based models** for structured data storage
 - **Full-text search** support with RediSearch
-- **Connection lifecycle management** with automatic reconnection
+- **Connection lifecycle management** with automatic event logging
 - **Health check utilities** for monitoring
 - **Multi-manager support** via Storehouse registry
 
